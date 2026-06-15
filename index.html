@@ -2,8 +2,17 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Любите театр | Тверь</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Афиша театров Твери — спектакли, премьеры, гастроли | Любите театр</title>
+<meta name="description" content="Афиша театров Твери: расписание спектаклей всех театров города — драмтеатр, ТЮЗ, театр кукол, независимые и любительские театры. Премьеры, даты показов, билеты.">
+<meta name="keywords" content="афиша Тверь, театры Твери, спектакли Тверь, театр драмы Тверь, ТЮЗ Тверь, театр кукол Тверь, куда сходить в Твери, афиша спектаклей">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Афиша театров Твери — Любите театр">
+<meta property="og:description" content="Расписание спектаклей всех театров Твери в одном месте.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://universal-beep.github.io/tver-afisha/">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -478,6 +487,27 @@
     .cal-day { min-height: 70px; padding: 4px; }
     .cal-event div { font-size: 8px; }
   }
+
+  /* SEO footer */
+  .seo-footer {
+    max-width: 900px;
+    margin: 40px auto 0;
+    padding: 28px 40px 48px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .seo-footer h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .seo-footer p { margin-bottom: 12px; }
+  .seo-footer a { color: var(--accent); text-decoration: none; }
+  .seo-footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -519,7 +549,6 @@
   </div>
   <div class="filter-checkboxes">
     <label class="check-label"><input type="checkbox" id="filterAvailable"> Только с билетами</label>
-    <label class="check-label"><input type="checkbox" id="filterGuest"> Гастроли / разовый</label>
     <label class="check-label"><input type="checkbox" id="filterPro"> Профессиональный театр</label>
   </div>
   <div class="toggle-group">
@@ -539,6 +568,29 @@
   <div class="calendar-view" id="calView"></div>
 </main>
 
+<footer class="seo-footer">
+  <h2>Афиша театров Твери</h2>
+  <p>
+    Здесь собрана полная афиша театров Твери — расписание спектаклей всех городских
+    сцен в одном месте. Тверской академический театр драмы, Тверской театр юного
+    зрителя (ТЮЗ), Тверской театр кукол, а также независимые и любительские
+    коллективы: театр «Зеркало», «Премьер», «Париж», Камерный театр, «Быстрый
+    театр», Театр Малых Форм и другие. Премьеры, классика и современная
+    драматургия, спектакли для детей и взрослых.
+  </p>
+  <p>
+    Афиша обновляется регулярно: даты показов, возрастные ограничения, жанры,
+    режиссёры и ссылки на покупку билетов. Удобный поиск по театру, жанру, дню
+    недели и цене, просмотр списком или календарём. Планируйте, куда сходить в
+    Твери на этой неделе и в выходные.
+  </p>
+  <p>
+    Следите за обновлениями афиши в Telegram-канале
+    <a href="https://t.me/teatrtver">«Любите театр | Тверь»</a> — независимые сцены,
+    премьеры, гастроли и всё, чем живёт театр в Твери.
+  </p>
+</footer>
+
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <button class="modal-close" onclick="closeModalDirect()">×</button>
@@ -548,7 +600,17 @@
 
 <script>
 // ============================================================
-// DATA — замени на загрузку из Google Таблицы
+// Telegram Mini App — раскрыть на весь экран внутри Telegram
+// ============================================================
+try {
+  if (window.Telegram && Telegram.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+  }
+} catch (e) {}
+
+// ============================================================
+// DATA
 // ============================================================
 const SHOWS = [
  {
@@ -2102,7 +2164,6 @@ function getFilters() {
     day: document.getElementById('filterDay').value,
     price: document.getElementById('filterPrice').value,
     available: document.getElementById('filterAvailable').checked,
-    guest: document.getElementById('filterGuest').checked,
     pro: document.getElementById('filterPro').checked
   };
 }
@@ -2117,7 +2178,6 @@ function getFilteredShows() {
     if (f.day !== '' && d.getDay() !== parseInt(f.day)) return false;
     if (f.price && s.price > parseInt(f.price)) return false;
     if (f.available && !s.ticketsAvailable) return false;
-    if (f.guest && !s.guestShow) return false;
     if (f.pro && !s.professional) return false;
     return true;
   });
@@ -2171,7 +2231,6 @@ function renderCard(s) {
   const tags = [
     s.genre ? `<span class="tag tag-genre">${s.genre}</span>` : '',
     s.eventType ? `<span class="tag tag-guest">${s.eventType}</span>` : '',
-    s.guestShow ? `<span class="tag tag-guest">Гастроли</span>` : '',
     s.ageLimit ? `<span class="tag tag-age">${s.ageLimit}</span>` : ''
   ].filter(Boolean).join('');
 
@@ -2223,9 +2282,9 @@ function renderCalendar() {
     const isToday = dateStr === todayStr;
     const dow = date.getDay();
     const isWeekend = dow === 0 || dow === 6;
-    const dayShows = showsByDate[dateStr] || [];
+    const dayShows = (showsByDate[dateStr] || []).slice().sort((a,b) => (a.time||'').localeCompare(b.time||''));
     const eventsHtml = dayShows.map(s => {
-      const cls = !s.ticketsAvailable ? 'sold-out' : s.guestShow ? 'guest-show' : s.professional ? 'professional' : '';
+      const cls = !s.ticketsAvailable ? 'sold-out' : s.professional ? 'professional' : '';
       return `<div class="cal-event ${cls}" onclick="openModal(${s.id})" title="${s.title} — ${s.theatre}">
         <div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.time} ${s.title}</div>
         <div style="font-size:9px;opacity:0.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px">${s.theatre}</div>
@@ -2255,7 +2314,6 @@ function openModal(id) {
   const tags = [
     s.genre ? `<span class="tag tag-genre">${s.genre}</span>` : '',
     s.eventType ? `<span class="tag tag-guest">${s.eventType}</span>` : '',
-    s.guestShow ? `<span class="tag tag-guest">Гастроли</span>` : '',
     s.ageLimit ? `<span class="tag tag-age">${s.ageLimit}</span>` : ''
   ].filter(Boolean).join('');
 
