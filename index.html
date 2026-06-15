@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Любите театр | Тверь</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f7f3ed;
+    --cream: #ede7db;
+    --accent: #8b2e1a;
+    --gold: #c4913a;
+    --muted: #7a6f65;
+    --border: #d5cdc3;
+    --tag-pro: #1a3a2a;
+    --tag-guest: #2a1a3a;
+    --tag-sold: #6b6b6b;
+    --tag-free: #1a3530;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--paper);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .city {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* FILTERS */
+  .filters-bar {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  select, .price-input {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 7px 12px;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  select {
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a6f65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  select:focus, .price-input:focus { border-color: var(--accent); }
+
+  .price-input { width: 80px; text-align: center; }
+
+  .toggle-group {
+    display: flex;
+    gap: 0;
+    margin-left: auto;
+    border: 1px solid var(--border);
+  }
+
+  .toggle-btn {
+    background: var(--paper);
+    border: none;
+    padding: 8px 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .toggle-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .filter-checkboxes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .check-label input { accent-color: var(--accent); }
+
+  /* MONTH NAV */
+  .month-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 40px 0;
+  }
+
+  .month-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* MAIN */
+  main { padding: 20px 40px 60px; }
+
+  /* CALENDAR VIEW */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .cal-header {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 10px 4px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .cal-day {
+    background: var(--paper);
+    min-height: 130px;
+    padding: 8px;
+    vertical-align: top;
+    position: relative;
+  }
+
+  .cal-day.other-month { background: var(--cream); opacity: 0.5; }
+  .cal-day.today .day-num { background: var(--accent); color: white; }
+  .cal-day.weekend .day-num { color: var(--accent); }
+
+  .day-num {
+    font-size: 13px;
+    font-weight: 500;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    border-radius: 50%;
+  }
+
+  .cal-event {
+    font-size: 10px;
+    line-height: 1.3;
+    padding: 3px 5px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    border-left: 2px solid var(--gold);
+    background: rgba(196,145,58,0.08);
+    transition: background 0.15s;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .cal-event:hover { background: rgba(196,145,58,0.18); }
+  .cal-event.sold-out { border-left-color: var(--tag-sold); background: rgba(107,107,107,0.08); opacity: 0.6; }
+  .cal-event.guest-show { border-left-color: #7c4d9a; background: rgba(124,77,154,0.08); }
+  .cal-event.professional { border-left-color: #2a6049; background: rgba(42,96,73,0.08); }
+  .cal-event.free-entry { border-left-color: #2a6049; background: rgba(42,96,73,0.08); }
+
+  /* LIST VIEW */
+  .list-view { display: none; }
+  .list-view.active { display: block; }
+  .calendar-view.active { display: block; }
+  .calendar-view { display: none; }
+
+  .day-section { margin-top: 28px; }
+
+  .day-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .day-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .day-weekday {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .events-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+  }
+
+  .card.sold-out::before { background: var(--tag-sold); }
+  .card.sold-out { opacity: 0.65; }
+  .card.guest-show::before { background: #7c4d9a; }
+  .card.professional::before { background: #2a6049; }
+  .card.free-entry::before { background: #2a6049; }
+
+  .card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-1px); }
+  .card.sold-out:hover { transform: none; box-shadow: none; }
+
+  .card-time {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .card-theatre {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+  }
+
+  .tag-genre { background: rgba(139,46,26,0.08); color: var(--accent); }
+  .tag-pro { background: rgba(26,58,42,0.1); color: var(--tag-pro); }
+  .tag-guest { background: rgba(124,77,154,0.1); color: #5a2d7a; }
+  .tag-sold { background: rgba(107,107,107,0.1); color: var(--tag-sold); }
+  .tag-free { background: rgba(26,53,48,0.1); color: var(--tag-free); }
+  .tag-age { background: var(--cream); color: var(--muted); }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--cream);
+  }
+
+  .card-price {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .card-link {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(139,46,26,0.3);
+    transition: border-color 0.2s;
+  }
+
+  .card-link:hover { border-color: var(--accent); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,20,16,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    max-width: 520px;
+    width: 100%;
+    padding: 36px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none; border: none;
+    font-size: 22px; cursor: pointer;
+    color: var(--muted);
+    line-height: 1;
+  }
+
+  .modal-time { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; line-height: 1.1; margin-bottom: 6px; }
+  .modal-theatre { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .modal-address { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+  .modal-desc { font-size: 13px; line-height: 1.7; color: var(--ink); margin-bottom: 20px; }
+  .modal-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+  .modal-meta-item { font-size: 11px; }
+  .modal-meta-label { color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; margin-bottom: 2px; }
+  .modal-meta-value { font-weight: 500; }
+  .modal-btn {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .modal-btn:hover { background: var(--accent); }
+  .modal-btn.sold { background: var(--tag-sold); cursor: default; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-state p { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    header { padding: 20px; }
+    .filters-bar { padding: 12px 20px; }
+    main { padding: 16px 20px 40px; }
+    .month-nav { padding: 16px 20px 0; }
+    .events-row { grid-template-columns: 1fr; }
+    .toggle-group { margin-left: 0; }
+    .cal-event { font-size: 9px; padding: 2px 4px; }
+    .cal-day { min-height: 70px; padding: 4px; }
+    .cal-event div { font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Любите <span>театр</span></div>
+  <div class="city">Тверь</div>
+</header>
+
+<div class="filters-bar">
+  <div class="filter-group">
+    <span class="filter-label">Театр</span>
+    <select id="filterTheatre">
+      <option value="">Все</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Жанр</span>
+    <select id="filterGenre">
+      <option value="">Все</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">День недели</span>
+    <select id="filterDay">
+      <option value="">Любой</option>
+      <option value="1">Понедельник</option>
+      <option value="2">Вторник</option>
+      <option value="3">Среда</option>
+      <option value="4">Четверг</option>
+      <option value="5">Пятница</option>
+      <option value="6">Суббота</option>
+      <option value="0">Воскресенье</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Цена до</span>
+    <input type="number" class="price-input" id="filterPrice" placeholder="∞" min="0" step="50">
+  </div>
+  <div class="filter-checkboxes">
+    <label class="check-label"><input type="checkbox" id="filterAvailable"> Только с билетами</label>
+    <label class="check-label"><input type="checkbox" id="filterGuest"> Гастроли / разовый</label>
+    <label class="check-label"><input type="checkbox" id="filterPro"> Профессиональный театр</label>
+  </div>
+  <div class="toggle-group">
+    <button class="toggle-btn active" id="btnList" onclick="switchView('list')">Список</button>
+    <button class="toggle-btn" id="btnCal" onclick="switchView('calendar')">Календарь</button>
+  </div>
+</div>
+
+<div class="month-nav">
+  <button class="nav-btn" onclick="changeMonth(-1)">&#8592;</button>
+  <div class="month-title" id="monthTitle"></div>
+  <button class="nav-btn" onclick="changeMonth(1)">&#8594;</button>
+</div>
+
+<main>
+  <div class="list-view active" id="listView"></div>
+  <div class="calendar-view" id="calView"></div>
+</main>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — замени на загрузку из Google Таблицы
+// ============================================================
+const SHOWS = [
+ {
+  "id": 1,
+  "title": "Как оживает кукла",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-16",
+  "time": "16:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1423",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "мастер-класса: 1 час",
+  "description": "Оживить куклу - задача не из простых. Как научить куклу двигаться и выполнять хотя бы простые действия?\nТверской театр кукол приглашает ребят познакомиться с героями сказок не в качестве зрителей, а в роли кукловодов. Вам откроется настоящая магия -  кукла оживет непосредственно в ваших руках.\nОбщение с куклами развивает память, мышление, артистические способности, мелкую моторику рук и знакомит с лучшими сказками мира.\nПочувствовать себя настоящими артистами и раскрыть таланты помогут профессиональные артисты-кукловоды Тверского театра кукол.\nКоличество мест ограничено."
+ },
+ {
+  "id": 2,
+  "title": "Кентервильское привидение",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-16",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1396",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 50 минут с антрактом",
+  "description": "Режиссёр — Петр Васильев. (инсценировка Петра Васильева)\nПривидения – необъятная и соблазнительная тема для великих литературных произведений и детских игр. А Кентервильский призрак – один из самых почетных членов этого потустороннего ареопага. Хотите познакомиться с ним и попасть в бесконечные коридоры старинного английского замка?\nАмериканское семейство Отисов покупает замок Кентервилей несмотря на обитающее в нем столетиями зловещее привидение. Призрак, веками пугавший местных владельцев, становится насмешкой и жертвой жестоких розыгрышей. И только шестнадцатилетняя Вирджиния способна на со"
+ },
+ {
+  "id": 3,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-16",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2400",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 4,
+  "title": "Кентервильское привидение",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-17",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1397",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 50 минут с антрактом",
+  "description": "Режиссёр — Петр Васильев. (инсценировка Петра Васильева)\nПривидения – необъятная и соблазнительная тема для великих литературных произведений и детских игр. А Кентервильский призрак – один из самых почетных членов этого потустороннего ареопага. Хотите познакомиться с ним и попасть в бесконечные коридоры старинного английского замка?\nАмериканское семейство Отисов покупает замок Кентервилей несмотря на обитающее в нем столетиями зловещее привидение. Призрак, веками пугавший местных владельцев, становится насмешкой и жертвой жестоких розыгрышей. И только шестнадцатилетняя Вирджиния способна на со"
+ },
+ {
+  "id": 5,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-17",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2393",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 6,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-18",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2394",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 7,
+  "title": "Путешествие по закулисью",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "",
+  "eventType": "Экскурсия",
+  "date": "2026-06-18",
+  "time": "16:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1424",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "экскурсии: 1 час",
+  "description": "Хотите попасть в сказочный мир закулисья Тверского театра кукол?!\nУ Вас есть уникальная возможность своими глазами увидеть театр кукол изнутри, узнать множество театральных легенд и секретов, прогуляться по театральным мастерским, где работают настоящие волшебники и даже попробовать себя в роли кукловода.\nМы расскажем о том, как рождается сказка, какие бывают куклы и кто их создает, заглянем во все тайные комнаты.\nСовершить путешествие по лабиринтам театра кукол Вам помогут профессиональные артисты театра!\nЭкскурсию по закулисью проводят заслуженные артисты РФ, ведущие мастера сцены, профессио"
+ },
+ {
+  "id": 8,
+  "title": "Капризная принцесса",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Музыкальная сказка",
+  "eventType": "",
+  "date": "2026-06-18",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1039",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. Ганс Христиан Андерсен - автор волшебных сказок для детей по всему миру и создатель произведений «Гадкий утенок», «Дюймовочка», «Снежная королева» и многих других. Сказки писателя переведены на 125 языков мира и век за веком олицетворяют собой уроки доброты, светлой морали, честности и стойкости.\nТакой является сказка писателя «Принцесса и свинопас»:\nГордая принцесса Луиза отвергает скромные подарки влюбленного в нее принца Филиппе, так как, по ее мнению, они недостаточно роскошны. Притворившись свинопасом, Филиппе устраивается работать у императора и создает вол"
+ },
+ {
+  "id": 9,
+  "title": "Хаврошечка",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-18",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1398",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 35 минут с антрактом",
+  "description": "Режиссёр — Алексей Смирнов. (пьеса Пети Трофимова).\nСюжет о работящей сироте, которую притесняют и обижают в чужой семье, встречается во многих сказках. Но, пожалуй, именно в “Крошечке-Хаврошечке” он предстает в таком элегичном, в таком меланхоличном изводе.\nЖила-была девочка, Хаврошечка, в семье у бабы с тремя дочерьми. И не было у нее заступницы и помощницы, кроме рябой коровы. Какова цена счастью, долго ли ждать справедливости и как отзывается любой поступок в будущем – такими, не детскими вопросами, задаётся это сказка.\nКомпозитор – Ольга Гайдамак.\nВ славянской мифологии известна небесная "
+ },
+ {
+  "id": 10,
+  "title": "Пигмалион",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-19",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2418",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Светлана Филатова. «А что такое жизнь, как не цепь вдохновенных безрассудств?..» Великая французская актриса Сара Бернар сказала о Бернарде Шоу: «Весь мир добрее его, но он – личность!!!» Неповторимый, язвительный, мудрый знаток человеческой природы, блистательный, афористичный – таким был Джордж Бернард Шоу при жизни, таким он остался в своих произведениях.\nИрландский драматург, романист, прозаик, философ, прославившийся своими афоризмами, выдающийся критик своего времени, лауреат Нобелевской премии в области литературы, обладатель премии Оскар за лучший адаптированный сценарий. Пь"
+ },
+ {
+  "id": 11,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-19",
+  "time": "17:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1062",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 12,
+  "title": "Пигмалион",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-19",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1019",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "",
+  "description": "Режиссёр — Светлана Филатова. «А что такое жизнь, как не цепь вдохновенных безрассудств?..» Великая французская актриса Сара Бернар сказала о Бернарде Шоу: «Весь мир добрее его, но он – личность!!!» Неповторимый, язвительный, мудрый знаток человеческой природы, блистательный, афористичный – таким был Джордж Бернард Шоу при жизни, таким он остался в своих произведениях.\nИрландский драматург, романист, прозаик, философ, прославившийся своими афоризмами, выдающийся критик своего времени, лауреат Нобелевской премии в области литературы, обладатель премии Оскар за лучший адаптированный сценарий. Пь"
+ },
+ {
+  "id": 13,
+  "title": "Хаврошечка",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-19",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1399",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 35 минут с антрактом",
+  "description": "Режиссёр — Алексей Смирнов. (пьеса Пети Трофимова).\nСюжет о работящей сироте, которую притесняют и обижают в чужой семье, встречается во многих сказках. Но, пожалуй, именно в “Крошечке-Хаврошечке” он предстает в таком элегичном, в таком меланхоличном изводе.\nЖила-была девочка, Хаврошечка, в семье у бабы с тремя дочерьми. И не было у нее заступницы и помощницы, кроме рябой коровы. Какова цена счастью, долго ли ждать справедливости и как отзывается любой поступок в будущем – такими, не детскими вопросами, задаётся это сказка.\nКомпозитор – Ольга Гайдамак.\nВ славянской мифологии известна небесная "
+ },
+ {
+  "id": 14,
+  "title": "Жили-были гуси",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-20",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1400",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "1 час 15 минут с антрактом",
+  "description": "Режиссёр — Екатерина Матвеева. Два друга – Федька и Петька – веселые и смелые гусята, но вот только беда с дисциплиной: эти птички не хотят никого слушать и слишком беспечны. Но мир не так прост: по соседству живет коварный и опытный Лис, и он не упустит случай воспользоваться безалаберностью друзей, которые и между собой не всегда ладят.\nСпектакль решен в формате вестерна – маленькие зрители попадут в мир Дикого Запада, полный опасных приключений и станут не только свидетелями, но и участниками передряг, из которых гусятам предстоит выбраться с помощью зала.\nПесня “Веселые гуси” (“Жили у бабу"
+ },
+ {
+  "id": 15,
+  "title": "Шум за сценой",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Фарс",
+  "eventType": "",
+  "date": "2026-06-20",
+  "time": "18:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1009",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "18+",
+  "duration": "2 часа 30 минут",
+  "description": "Режиссёр — Александр Сафронов. Майкл Фрейн (род.1933) – английский драматург, писатель и переводчик.\nСамая известная его пьеса «Шум за сценой» впервые была поставлена в 1982 году в Лондоне, чуть позже состоялась бродвейская премьера, и с тех пор она не сходит с театральных подмостков по обе стороны Атлантики. В ней блистательно применен открытый еще в шекспировские времена прием «театр в театре», где реальность и вымысел переплетаются в череде забавных недоразумений.\n«Меня очень вдохновил театр. Весьма интересно наблюдать, как твое произведение перелопачивают режиссер и актеры. Сочинять книгу "
+ },
+ {
+  "id": 16,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-20",
+  "time": "16:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1063",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 17,
+  "title": "Волшебная яблоня",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Сказка",
+  "eventType": "",
+  "date": "2026-06-20",
+  "time": "14:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1020",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. «Волшебная яблоня» основана на русской народной сказке «Крошечка–Хаврошечка» и учит состраданию, терпению и трудолюбию, которые всегда сполна вознаграждаются.\nЮная сирота Хаврошечка – кроткая и сильная девочка. Героиня стойко справляется со сложными задачами по хозяйству, которые дает ей Бобылиха и ее родные дочери. Но нет ничего невозможного, если у тебя большое сердце, вера в лучшее и добрая душа! Именно благодаря этим качествам в финале спектакля Хаврошечка обретет счастье и любовь.\nЗа жизненными перипетиями главной героини будет интересно наблюдать: создатели"
+ },
+ {
+  "id": 18,
+  "title": "Танкист",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-22",
+  "time": "18:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1418",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "50 минут без антракта",
+  "description": "Великая Отечественная война. Потери в танковых дивизиях с обеих сторон исчисляются тысячами. Однако у «Белого тигра», немецкого танка, и Иван Ивановича Найдёнова, чудом выжившего русского танкиста с уникальным даром, своя битва, свой поединок, в котором нет пустого бахвальства.\nПостановка по повести «Танкист» замечательного писателя, нашего современника, Ильи Бояшова рассказывает о вере в силу Добра. Добра, которое обязательно победит Зло, каким бы непобедимым оно ни казалось.\nХочется верить, что пока на свете будет существовать хоть один «Белый тигр», чудовище, словно выскочившее из самой пре"
+ },
+ {
+  "id": 19,
+  "title": "Капризная принцесса",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Музыкальная сказка",
+  "eventType": "",
+  "date": "2026-06-22",
+  "time": "12:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1043",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. Ганс Христиан Андерсен - автор волшебных сказок для детей по всему миру и создатель произведений «Гадкий утенок», «Дюймовочка», «Снежная королева» и многих других. Сказки писателя переведены на 125 языков мира и век за веком олицетворяют собой уроки доброты, светлой морали, честности и стойкости.\nТакой является сказка писателя «Принцесса и свинопас»:\nГордая принцесса Луиза отвергает скромные подарки влюбленного в нее принца Филиппе, так как, по ее мнению, они недостаточно роскошны. Притворившись свинопасом, Филиппе устраивается работать у императора и создает вол"
+ },
+ {
+  "id": 20,
+  "title": "Дневник прилавка. Блокада",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-22",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2424",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "1 час",
+  "description": "Режиссёр — Тимур Шарафутдинов. Ольга Родштейн\n80-летию Победы в Великой Отечественной войне посвящается\nЧитка состоится 9 декабря\nКнига появилась в продаже только в 2023 году, но сразу обрела популярность благодаря необычной подаче, пронзительному лиризму и очень личным историям, эмоционально и искренне рассказанным автором.\nЭто блокадные дневники сотрудницы Ленинградского Дома книги Ольги Родштейн, которая вместе со всеми ленинградцами переживала тяготы и лишения блокады. Автор честно рассказывает обо всех страшных страницах военного времени, о бытовых радостях, неожиданных открытиях и о наде"
+ },
+ {
+  "id": 21,
+  "title": "Капризная принцесса",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Музыкальная сказка",
+  "eventType": "",
+  "date": "2026-06-24",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1038",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. Ганс Христиан Андерсен - автор волшебных сказок для детей по всему миру и создатель произведений «Гадкий утенок», «Дюймовочка», «Снежная королева» и многих других. Сказки писателя переведены на 125 языков мира и век за веком олицетворяют собой уроки доброты, светлой морали, честности и стойкости.\nТакой является сказка писателя «Принцесса и свинопас»:\nГордая принцесса Луиза отвергает скромные подарки влюбленного в нее принца Филиппе, так как, по ее мнению, они недостаточно роскошны. Притворившись свинопасом, Филиппе устраивается работать у императора и создает вол"
+ },
+ {
+  "id": 22,
+  "title": "Капризная принцесса",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Музыкальная сказка",
+  "eventType": "",
+  "date": "2026-06-25",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1040",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. Ганс Христиан Андерсен - автор волшебных сказок для детей по всему миру и создатель произведений «Гадкий утенок», «Дюймовочка», «Снежная королева» и многих других. Сказки писателя переведены на 125 языков мира и век за веком олицетворяют собой уроки доброты, светлой морали, честности и стойкости.\nТакой является сказка писателя «Принцесса и свинопас»:\nГордая принцесса Луиза отвергает скромные подарки влюбленного в нее принца Филиппе, так как, по ее мнению, они недостаточно роскошны. Притворившись свинопасом, Филиппе устраивается работать у императора и создает вол"
+ },
+ {
+  "id": 23,
+  "title": "Маленькие большие женщины",
+  "theatre": "Тверской театр кукол",
+  "address": "пр-т Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-26",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-kukol/s1419",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "1 час 30 минут",
+  "description": "Режиссёр — Виталий Салтыков. Все мы родом из детства, словно из какой-нибудь страны…\n(Антуан де-Сент Экзюпери)\nИменно там, в детстве, начинается и определяется путь каждого. Мы неизбежно взрослеем, и, вместе с тем, как-то незаметно забываем что-то очень важное, что было по-настоящему значимым тогда, «когда деревья были большими». А что, если собрать воспоминания из детства разных людей? Получится проникновенный искренний разговор.\nСпектакль на сцене Тверского театра кукол – это воспоминания из детства. Именно тех, кто принял участие в создании спектакля. То есть, воспоминания непосредственно а"
+ },
+ {
+  "id": 24,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-26",
+  "time": "17:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1064",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 25,
+  "title": "Свадебный переполох",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Водевиль",
+  "eventType": "",
+  "date": "2026-06-26",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1022",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Алексей Майский. Павел Степанович Фёдоров – российский драматург, театральный деятель. действительный статский советник. В XIX веке служил управляющим Санкт–Петербургским театральным училищем: стремился развивать русскую оперу, добился выплаты гонораров за представление драматических произведений, принимал участие в деятельности театрально–литературного комитета.\nПавел Федоров – автор множества водевилей, его перу принадлежит русская адаптация сюжета «Соломенная шляпка». Тонкая ирония автора в произведении «Аз и Ферт, или Свадьба с вензелями», искусно демонстрирует барство и упрямст"
+ },
+ {
+  "id": 26,
+  "title": "Волшебная яблоня",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Сказка",
+  "eventType": "",
+  "date": "2026-06-27",
+  "time": "14:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1021",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1 час 15 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. «Волшебная яблоня» основана на русской народной сказке «Крошечка–Хаврошечка» и учит состраданию, терпению и трудолюбию, которые всегда сполна вознаграждаются.\nЮная сирота Хаврошечка – кроткая и сильная девочка. Героиня стойко справляется со сложными задачами по хозяйству, которые дает ей Бобылиха и ее родные дочери. Но нет ничего невозможного, если у тебя большое сердце, вера в лучшее и добрая душа! Именно благодаря этим качествам в финале спектакля Хаврошечка обретет счастье и любовь.\nЗа жизненными перипетиями главной героини будет интересно наблюдать: создатели"
+ },
+ {
+  "id": 27,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-27",
+  "time": "16:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1065",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 28,
+  "title": "История небольшого города",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-27",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2383",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "10+",
+  "duration": "1ч.30мин без антракта",
+  "description": "Режиссёр — Ирина Кондрашова. Автор пьесы Ирина Кондрашова\n«История небольшого города» - спектакль о Твери, месте, где когда-то жили динозавры, лютовала холера, сменялись правители, гулял Пушкин, танцевал император.\nРежиссер и автор пьесы Ирина Кондрашова создала инсценировку для спектакля, вдохновившись необычной и яркой историей нашего города. Подробно изучив труды известного краеведа и писателя Владимира Колосова, она гуляла по Твери, ходила в музеи, разговаривала с людьми, чтобы почувствовать истинный дух города, увидеть его лицо, понять душу. Так родился спектакль, в котором встречаются Тв"
+ },
+ {
+  "id": 29,
+  "title": "Оскар",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-27",
+  "time": "18:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1010",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "2 часа 30 минут",
+  "description": "Режиссёр — Иоланта Мельникова. Клод Манье – актер, известный французский драматург и сценарист середины XX века, владевший искусством создания комедии положений.\nПроизведения Клода Манье строятся на парадоксах и динамике событий сюжета, блестящих диалогах, путанице между героями, тонкости чувств и человеческих взаимоотношений.\nПьесы автора «Блэз», «Месье Мазюр», «Эрмина» и сегодня остаются репертуарными хитами множества театров России и зарубежья. Безусловный бестселлер Манье «Оскар» переведен почти на все языки мира, а особый успех комедии принесли одноименные экранизации с Луи де Фюнесом и С"
+ },
+ {
+  "id": 30,
+  "title": "История небольшого города",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-28",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2384",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "10+",
+  "duration": "1ч.30мин без антракта",
+  "description": "Режиссёр — Ирина Кондрашова. Автор пьесы Ирина Кондрашова\n«История небольшого города» - спектакль о Твери, месте, где когда-то жили динозавры, лютовала холера, сменялись правители, гулял Пушкин, танцевал император.\nРежиссер и автор пьесы Ирина Кондрашова создала инсценировку для спектакля, вдохновившись необычной и яркой историей нашего города. Подробно изучив труды известного краеведа и писателя Владимира Колосова, она гуляла по Твери, ходила в музеи, разговаривала с людьми, чтобы почувствовать истинный дух города, увидеть его лицо, понять душу. Так родился спектакль, в котором встречаются Тв"
+ },
+ {
+  "id": 31,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-29",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1066",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 32,
+  "title": "Улётные парни",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-29",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1011",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "18+",
+  "duration": "2 часа 40 минут",
+  "description": "Режиссёр — Дмитрий Петрунь. Марк Камолетти – драматург, среди первых стоящий в ряду выдающихся французских комедиографов. Автор 18 популярных пьес по образованию был художником в графике, и в один момент своей жизни принял решение оставить профессию и целиком посвятить себя драматургии. Выбор оказался успешным: его пьесы поставлены в более, чем 55 странах мира, и искрометная комедия положений «Боинг-Боинг» выбрала театральными режиссерами для постановки на подмостках более, чем 10 000 раз.\nБернар встречается одновременно с тремя стюардессами. Водоворот событий усиливается вокруг главного героя"
+ },
+ {
+  "id": 33,
+  "title": "Забудем об этом",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Фарс",
+  "eventType": "",
+  "date": "2026-06-30",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1018",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "18+",
+  "duration": "1 час 30 минут без антракта",
+  "description": "Режиссёр — Иоланта Мельникова. Саймон Уильямс (р. 1946 г.) – английский актёр, режиссёр, писатель и драматург. Уильямс – автор двух романов «Говорящие Оскары», «Тушите свет!» и семи пьес, среди них наиболее известна «У каждого свои недостатки». Саймон Уильямс часто ставит свои пьесы и пьесы других авторов в британских театрах и с удовольствием появляется на сцене и на экране.\n«Из всех тем для разговора на Земле, Лео Кидд – та самая, которой я предпочитаю никогда не касаться. Забудем об этом!»"
+ },
+ {
+  "id": 34,
+  "title": "Выставка \"Чувствуя сердцем\"",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "",
+  "eventType": "Выставка",
+  "date": "2026-06-30",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1067",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 35,
+  "title": "Номер 13 (Беспорядок)",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-30",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1012",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 36,
+  "title": "Мастер и Маргарита",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-07-01",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1013",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "3 часа",
+  "description": "Режиссёр — Александр Павлишин. Михаил Афанасьевич Булгаков – знаменитый драматург и писатель, журналист, режиссер и актер. Наиболее любим читателями, благодаря романам «Мастер и Маргарита», «Белая гвардия», повести «Собачье сердце», пьесе «Кабала святош», рассказу «Морфий» (из сборника «Записки юного врача»). Поразительно, что в течение многих лет «рукописи» классика, которые, как известно, «не горят», запрещались к печати и постановке в театрах. Мировая популярность пришла к М.А. Булгакову уже после его смерти.\nМастер пишет о последних днях Спасителя на земле и его роковой встрече с Понтием П"
+ },
+ {
+  "id": 37,
+  "title": "Гамлет",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Трагедия",
+  "eventType": "",
+  "date": "2026-07-02",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1014",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "2 часа 40 минут c одним антрактом",
+  "description": "Режиссёр — Александр Павлишин. Трагедия Уильяма Шекспира «Гамлет» – вершина мировой драматургии, в которой автор обращается к вечным вопросам человеческого бытия: совести, долга, смысла жизни и смерти. В постановке Тверского академического театра драмы пьеса представлена в переводе Андрея Чернова.\nВ центре сюжета – история принца Датского, оказавшегося в водовороте трагических событий. Он сталкивается с предательством, утратой и моральным выбором, проходя путь духовного прозрения.\nРежиссер Александр Павлишин представляет Гамлета не как холодного мыслителя, а как человека с большим сердцем, спо"
+ },
+ {
+  "id": 38,
+  "title": "Лисьи огни",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-07-02",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2412",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Фамил Джавадов. Пьеса Влады Ольховской\n«Лисьи огни» — мистическая драма Влады Ольховской (2023). Написана в рамках II коллаборативной лаборатории современной драматургии для подростков «Своя территория» (Омск).\nПьеса поднимает тему школьного буллинга (травли), но проблема рассматривается с необычного ракурса — глазами самих буллеров (агрессоров).\nГруппу подростков, наказанных за жесткий буллинг, везут на реабилитационный семинар. Внезапно автобус останавливается посреди загородной дороги под северным сиянием. Одна из пассажирок насмешливо вспоминает легенду о небесной лисице, котора"
+ },
+ {
+  "id": 39,
+  "title": "Лисьи огни",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-07-03",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2413",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Фамил Джавадов. Пьеса Влады Ольховской\n«Лисьи огни» — мистическая драма Влады Ольховской (2023). Написана в рамках II коллаборативной лаборатории современной драматургии для подростков «Своя территория» (Омск).\nПьеса поднимает тему школьного буллинга (травли), но проблема рассматривается с необычного ракурса — глазами самих буллеров (агрессоров).\nГруппу подростков, наказанных за жесткий буллинг, везут на реабилитационный семинар. Внезапно автобус останавливается посреди загородной дороги под северным сиянием. Одна из пассажирок насмешливо вспоминает легенду о небесной лисице, котора"
+ },
+ {
+  "id": 40,
+  "title": "Безумный день, или Женитьба Фигаро",
+  "theatre": "Тверской академический театр драмы",
+  "address": "ул. Советская, 16",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-07-03",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-teatr-dramy/s1015",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "3 часа с антрактом",
+  "description": "Режиссёр — Александр Павлишин. Пьер-Огюстен Карон де Бомарше – французский драматург, публицист, чье имя навсегда связано с пьесами «Севильский цирюльник» и «Женитьба Фигаро». Вторая, написанная автором почти два с половиной века назад, до сих пор не сходит с театральных подмостков всего мира.\nПьер-Огюстен Карон был яркой фигурой своего времени: сын часовщика, изобретатель, музыкант, сумевший стать учителем у детей короля Франции, знаменитым драматургом. Своего положения и имени де Бомарше он добился ценой настойчивости, риска, борьбы, с присущей ему иронией и оптимизмом, словно герой собствен"
+ },
+ {
+  "id": 41,
+  "title": "Into.ТЮЗ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "",
+  "eventType": "Экскурсия",
+  "date": "2026-07-04",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2422",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч.30мин. - 2ч",
+  "description": "Экскурсия\nАвторские экскурсии по закулисью от Заслуженного артиста России Александра Евдокимова и артиста Владимира Крылова.\nТверской ТЮЗ сегодня - это лидирующий театр области, который активно гастролирует и участвует в главных театральных фестивалях страны. Наши спектакли номинируются на “Золотую маску” и попадают в лонг-лист фестиваля, их транслирует телеканал “Культура”, а спектакль “Пустота” можно посмотреть в самолете “Аэрофлота”. Театр известен в России среди критиков, имеет репутацию  в профессиональном сообществе, а многие режиссеры мечтают поставить свои работы на тверской сцене.\nПро"
+ },
+ {
+  "id": 42,
+  "title": "Into.ТЮЗ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "",
+  "eventType": "Экскурсия",
+  "date": "2026-07-05",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2423",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч.30мин. - 2ч",
+  "description": "Экскурсия\nАвторские экскурсии по закулисью от Заслуженного артиста России Александра Евдокимова и артиста Владимира Крылова.\nТверской ТЮЗ сегодня - это лидирующий театр области, который активно гастролирует и участвует в главных театральных фестивалях страны. Наши спектакли номинируются на “Золотую маску” и попадают в лонг-лист фестиваля, их транслирует телеканал “Культура”, а спектакль “Пустота” можно посмотреть в самолете “Аэрофлота”. Театр известен в России среди критиков, имеет репутацию  в профессиональном сообществе, а многие режиссеры мечтают поставить свои работы на тверской сцене.\nПро"
+ },
+ {
+  "id": 43,
+  "title": "Звезда по имени Отто",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-16",
+  "time": "13:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2447",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": "Режиссёр — Анастасия Божатова и Инна Волкова. Первый спектакль для детей на «Шатер-сцене»\n30 минут без антракта\nАвторский спектакль Анастасии Божатовой и Инны Волковой открывает новое пространство Тверского ТЮЗа - «Шатер-сцену».\n«Звезда по имени Отто» - история о том, как мальчик и собака вместе проводят время. Но первая дружба приносит не только первые радости, но и первые потери. И спектакль предлагает рецепт, как их можно пережить. Все это сделано тактично и с юмором.\n«Шатер-сцена» - камерное уютное безопасное пространство для спектаклей, куда можно прийти всей семьей с маленькими детьми. З"
+ },
+ {
+  "id": 44,
+  "title": "Звезда по имени Отто",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-22",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2448",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": "Режиссёр — Анастасия Божатова и Инна Волкова. Первый спектакль для детей на «Шатер-сцене»\n30 минут без антракта\nАвторский спектакль Анастасии Божатовой и Инны Волковой открывает новое пространство Тверского ТЮЗа - «Шатер-сцену».\n«Звезда по имени Отто» - история о том, как мальчик и собака вместе проводят время. Но первая дружба приносит не только первые радости, но и первые потери. И спектакль предлагает рецепт, как их можно пережить. Все это сделано тактично и с юмором.\n«Шатер-сцена» - камерное уютное безопасное пространство для спектаклей, куда можно прийти всей семьей с маленькими детьми. З"
+ },
+ {
+  "id": 45,
+  "title": "Обыкновенное чудо",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-23",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2444",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "14+",
+  "duration": "2ч. 20 мин. с антрактом",
+  "description": "Режиссёр — Вероника Вигг. Евгений Шварц\nСонет\n«Смерти нет, а есть любовь и память сердца»\nЛ.Н. Толстой\nКогда талантливый писатель решает поговорить со своей женой о любви, он садится и создает величайшее произведение о чуде, надежде и смелости быть собой настоящим. Так родилось «Обыкновенное чудо» Евгения Шварца. Когда режиссер хочет поговорить со зрителем о любви, он тщательно выбирает пьесу, добавляет туда драгоценные крупицы из дневников автора и вместе с художниками отбирает и визуализирует самые трепетные и нежные воспоминания из детства. Так в Тверском ТЮЗе рождается «Обыкновенное чудо» "
+ },
+ {
+  "id": 46,
+  "title": "Космос. Мама. Я",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-25",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2453",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "",
+  "description": ""
+ },
+ {
+  "id": 47,
+  "title": "Into.ТЮЗ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "",
+  "eventType": "Экскурсия",
+  "date": "2026-08-26",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2451",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч.30мин. - 2ч",
+  "description": "Экскурсия\nАвторские экскурсии по закулисью от Заслуженного артиста России Александра Евдокимова и артиста Владимира Крылова.\nТверской ТЮЗ сегодня - это лидирующий театр области, который активно гастролирует и участвует в главных театральных фестивалях страны. Наши спектакли номинируются на “Золотую маску” и попадают в лонг-лист фестиваля, их транслирует телеканал “Культура”, а спектакль “Пустота” можно посмотреть в самолете “Аэрофлота”. Театр известен в России среди критиков, имеет репутацию  в профессиональном сообществе, а многие режиссеры мечтают поставить свои работы на тверской сцене.\nПро"
+ },
+ {
+  "id": 48,
+  "title": "Into.ТЮЗ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "",
+  "eventType": "Экскурсия",
+  "date": "2026-08-27",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2452",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч.30мин. - 2ч",
+  "description": "Экскурсия\nАвторские экскурсии по закулисью от Заслуженного артиста России Александра Евдокимова и артиста Владимира Крылова.\nТверской ТЮЗ сегодня - это лидирующий театр области, который активно гастролирует и участвует в главных театральных фестивалях страны. Наши спектакли номинируются на “Золотую маску” и попадают в лонг-лист фестиваля, их транслирует телеканал “Культура”, а спектакль “Пустота” можно посмотреть в самолете “Аэрофлота”. Театр известен в России среди критиков, имеет репутацию  в профессиональном сообществе, а многие режиссеры мечтают поставить свои работы на тверской сцене.\nПро"
+ },
+ {
+  "id": 49,
+  "title": "Остров сокровищ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-29",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2445",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "9+",
+  "duration": "1 ч.40 мин. с антрактом",
+  "description": "Режиссёр — Вероника Вигг. По мотивам романа Роберта Льюиса Стивенсона\nИстория взросления\nСпектакль “Остров сокровищ” поставлен по одноименному роману Роберта Стивенсона - одной из самых популярных приключенческих книг для подростков. Главный герой Джим отправляется в рискованное путешествие в весьма сомнительной компании. На пути его ждет множество испытаний и трудных выборов, каждый из которых определит его дальнейшую жизнь. История о том, как подросток, верящий в свою непобедимость, встречается с реальной жизнью, с подлостью, предательством, хорошими людьми и разными. Кем он выйдет из этих и"
+ },
+ {
+  "id": 50,
+  "title": "Звезда по имени Отто",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-29",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2449",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": "Режиссёр — Анастасия Божатова и Инна Волкова. Первый спектакль для детей на «Шатер-сцене»\n30 минут без антракта\nАвторский спектакль Анастасии Божатовой и Инны Волковой открывает новое пространство Тверского ТЮЗа - «Шатер-сцену».\n«Звезда по имени Отто» - история о том, как мальчик и собака вместе проводят время. Но первая дружба приносит не только первые радости, но и первые потери. И спектакль предлагает рецепт, как их можно пережить. Все это сделано тактично и с юмором.\n«Шатер-сцена» - камерное уютное безопасное пространство для спектаклей, куда можно прийти всей семьей с маленькими детьми. З"
+ },
+ {
+  "id": 51,
+  "title": "Звезда по имени Отто",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-08-30",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2450",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "0+",
+  "duration": "",
+  "description": "Режиссёр — Анастасия Божатова и Инна Волкова. Первый спектакль для детей на «Шатер-сцене»\n30 минут без антракта\nАвторский спектакль Анастасии Божатовой и Инны Волковой открывает новое пространство Тверского ТЮЗа - «Шатер-сцену».\n«Звезда по имени Отто» - история о том, как мальчик и собака вместе проводят время. Но первая дружба приносит не только первые радости, но и первые потери. И спектакль предлагает рецепт, как их можно пережить. Все это сделано тактично и с юмором.\n«Шатер-сцена» - камерное уютное безопасное пространство для спектаклей, куда можно прийти всей семьей с маленькими детьми. З"
+ },
+ {
+  "id": 52,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-05",
+  "time": "12:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2454",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 53,
+  "title": "Посадить дерево",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-09-09",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2465",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Сергей Зюзин. Алексей Житковский\nШутка в одном действии\nАртист Сергей Зюзин, выпускник Высшей школы сценических искусств (курс К.А.Райкина) представляет на сцене Тверского театра юного зрителя дипломный спектакль по пьесе Алексея Житковского «Посадить дерево».\n«Шутка в одном действии» - так драматург Алексей Житковский определил свое произведение. Вот только смеяться придется сквозь слезы.\nКазалось бы, что может быть проще – посадить дерево? Но если два, казалось бы, самых близких друг другу человека – отец и сын – не хотят слышать друг друга, это простое действие становится невозмо"
+ },
+ {
+  "id": 54,
+  "title": "Посадить дерево",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-09-10",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2466",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Сергей Зюзин. Алексей Житковский\nШутка в одном действии\nАртист Сергей Зюзин, выпускник Высшей школы сценических искусств (курс К.А.Райкина) представляет на сцене Тверского театра юного зрителя дипломный спектакль по пьесе Алексея Житковского «Посадить дерево».\n«Шутка в одном действии» - так драматург Алексей Житковский определил свое произведение. Вот только смеяться придется сквозь слезы.\nКазалось бы, что может быть проще – посадить дерево? Но если два, казалось бы, самых близких друг другу человека – отец и сын – не хотят слышать друг друга, это простое действие становится невозмо"
+ },
+ {
+  "id": 55,
+  "title": "Косточка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-13",
+  "time": "14:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2468",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч. 10мин. без антракта",
+  "description": "Режиссёр — Юлия Беляева. Игры по Толстому\nНе все знают, что кроме Толстого - великого писателя, Толстого - философа, Толстой был ещё и педагог, и не просто педагог а создатель своей собственной системы воспитания. Лев Николаевич очень любил детей, проводил с ними много времени, учился у них мировосприятию, а в ответ проводил крестьянским ребятишкам уроки по математике и астрономии, физике и истории, русскому языку, даже физруком был! И конечно, результатом такого общения стали многочисленные рассказы, на которые вдохновляли Толстого юные жители Ясной поляны. Эти рассказы и легли в основу спект"
+ },
+ {
+  "id": 56,
+  "title": "История небольшого города",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-15",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2469",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "10+",
+  "duration": "1ч.30мин без антракта",
+  "description": "Режиссёр — Ирина Кондрашова. Автор пьесы Ирина Кондрашова\n«История небольшого города» - спектакль о Твери, месте, где когда-то жили динозавры, лютовала холера, сменялись правители, гулял Пушкин, танцевал император.\nРежиссер и автор пьесы Ирина Кондрашова создала инсценировку для спектакля, вдохновившись необычной и яркой историей нашего города. Подробно изучив труды известного краеведа и писателя Владимира Колосова, она гуляла по Твери, ходила в музеи, разговаривала с людьми, чтобы почувствовать истинный дух города, увидеть его лицо, понять душу. Так родился спектакль, в котором встречаются Тв"
+ },
+ {
+  "id": 57,
+  "title": "Лисьи огни",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-18",
+  "time": "18:30",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2458",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Фамил Джавадов. Пьеса Влады Ольховской\n«Лисьи огни» — мистическая драма Влады Ольховской (2023). Написана в рамках II коллаборативной лаборатории современной драматургии для подростков «Своя территория» (Омск).\nПьеса поднимает тему школьного буллинга (травли), но проблема рассматривается с необычного ракурса — глазами самих буллеров (агрессоров).\nГруппу подростков, наказанных за жесткий буллинг, везут на реабилитационный семинар. Внезапно автобус останавливается посреди загородной дороги под северным сиянием. Одна из пассажирок насмешливо вспоминает легенду о небесной лисице, котора"
+ },
+ {
+  "id": 58,
+  "title": "Лисьи огни",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-19",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2459",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Фамил Джавадов. Пьеса Влады Ольховской\n«Лисьи огни» — мистическая драма Влады Ольховской (2023). Написана в рамках II коллаборативной лаборатории современной драматургии для подростков «Своя территория» (Омск).\nПьеса поднимает тему школьного буллинга (травли), но проблема рассматривается с необычного ракурса — глазами самих буллеров (агрессоров).\nГруппу подростков, наказанных за жесткий буллинг, везут на реабилитационный семинар. Внезапно автобус останавливается посреди загородной дороги под северным сиянием. Одна из пассажирок насмешливо вспоминает легенду о небесной лисице, котора"
+ },
+ {
+  "id": 59,
+  "title": "Остров сокровищ",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-20",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2460",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "9+",
+  "duration": "1 ч.40 мин. с антрактом",
+  "description": "Режиссёр — Вероника Вигг. По мотивам романа Роберта Льюиса Стивенсона\nИстория взросления\nСпектакль “Остров сокровищ” поставлен по одноименному роману Роберта Стивенсона - одной из самых популярных приключенческих книг для подростков. Главный герой Джим отправляется в рискованное путешествие в весьма сомнительной компании. На пути его ждет множество испытаний и трудных выборов, каждый из которых определит его дальнейшую жизнь. История о том, как подросток, верящий в свою непобедимость, встречается с реальной жизнью, с подлостью, предательством, хорошими людьми и разными. Кем он выйдет из этих и"
+ },
+ {
+  "id": 60,
+  "title": "Хождение за три моря",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-22",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2470",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "",
+  "description": "Режиссёр — Галина Сергеева. Галина Сергеева\nПроект \"Театр в школе\", путевые заметки\n50 мин без антракта\nТверской ТЮЗ представляет проект «Театр в школе», посвященный 550-летию с момента прибытия Тверского купца Афанасия Никитина в Индию - путевые заметки «Хождение за три моря». Афанасий Никитин один из самых знаменитых жителей Твери: русский путешественник, писатель, тверской купец, автор знаменитых путевых записей, известных под названием «Хождение за три моря». Одним из первых среди европейцев достиг Индии. В 2021 году исполнилось 550 лет с момента прибытия тверского купца Афанасия Никитина "
+ },
+ {
+  "id": 61,
+  "title": "Чёрная курица",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-24",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2461",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "2 часа с антрактом",
+  "description": "Режиссёр — Юлия Беляева. По мотивам знаменитой повести Антония Погорельского\nМагический реализм\nСпектакль по мотивам знаменитой повести Антония Погорельского раскрывает перед зрителем философскую и немного мрачную историю о взрослении мальчика Алёши, который, совершив одно благое дело, попадает в мир подземных жителей. Там-то мальчик и столкнется с искушениями, которые навсегда изменят его жизнь. Мы не стремимся к нравоучениям, скорее исследуем этапы инициации мальчика в молодого человека, следим за движениями его души, которая стремится к празднику и свободе любой ценой...\nСпектакль рекоменду"
+ },
+ {
+  "id": 62,
+  "title": "Чёрная курица",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-25",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2462",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "2 часа с антрактом",
+  "description": "Режиссёр — Юлия Беляева. По мотивам знаменитой повести Антония Погорельского\nМагический реализм\nСпектакль по мотивам знаменитой повести Антония Погорельского раскрывает перед зрителем философскую и немного мрачную историю о взрослении мальчика Алёши, который, совершив одно благое дело, попадает в мир подземных жителей. Там-то мальчик и столкнется с искушениями, которые навсегда изменят его жизнь. Мы не стремимся к нравоучениям, скорее исследуем этапы инициации мальчика в молодого человека, следим за движениями его души, которая стремится к празднику и свободе любой ценой...\nСпектакль рекоменду"
+ },
+ {
+  "id": 63,
+  "title": "Чёрная курица",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-26",
+  "time": "12:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2463",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "12+",
+  "duration": "2 часа с антрактом",
+  "description": "Режиссёр — Юлия Беляева. По мотивам знаменитой повести Антония Погорельского\nМагический реализм\nСпектакль по мотивам знаменитой повести Антония Погорельского раскрывает перед зрителем философскую и немного мрачную историю о взрослении мальчика Алёши, который, совершив одно благое дело, попадает в мир подземных жителей. Там-то мальчик и столкнется с искушениями, которые навсегда изменят его жизнь. Мы не стремимся к нравоучениям, скорее исследуем этапы инициации мальчика в молодого человека, следим за движениями его души, которая стремится к празднику и свободе любой ценой...\nСпектакль рекоменду"
+ },
+ {
+  "id": 64,
+  "title": "Мёртвые души",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-27",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2464",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "14+",
+  "duration": "2ч. 30мин.с антрактом",
+  "description": "Режиссёр — Наталия Лапина. Николай Гоголь (инсценировка Михаила Булгакова)\nРежиссёрская версия текста Н. Лапиной\n\"Бывает время, когда нельзя устремить общество, или даже всё поколение, к прекрасному, пока не покажешь всю глубину его настоящей мерзости\", - так сказал Николай Васильевич Гоголь, и сейчас, спустя почти 200 лет, эта фраза не потеряла своей актуальности. Наш спектакль «Мёртвые души» показывает различные типажи человеческой натуры, с которыми встречается главный герой Павел Иванович Чичиков, путешествующий не то по разным усадьбам помещиков, не то «по карте русской действительности» "
+ },
+ {
+  "id": 65,
+  "title": "Головокружительное мороженое",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-27",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2471",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "6+",
+  "duration": "1ч.15мин без антракта",
+  "description": "Режиссёр — Алексей Пучков. Михаил Зощенко, автор инсценировки Алексей Пучков\nПо мотивам рассказов \"Лёля и Минька\"\nЧасто ли вы сегодня чувствуете себя счастливым? Среди забот, жизненных проблем мы совсем забываем, что абсолютно счастливым каждый из нас был в детстве: когда, например, обычное мороженое было самым вкусным в мире; когда за двойку в дневнике могло влететь ну ооочень сильно; когда ты забегал домой попить, но родители тебя уже не выпускали на улицу из-за невыученных уроков.\nИ даже сейчас, когда каждый из нас чувствует вкус, отдалённо напоминающий вкус из детства, мы становимся немнож"
+ },
+ {
+  "id": 66,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-29",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2455",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 67,
+  "title": "Приключение Колобка",
+  "theatre": "Тверской ТЮЗ",
+  "address": "ул. Советская, 32",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-09-30",
+  "time": "11:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Билеты на сайте",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://quicktickets.ru/tver-tuz/s2456",
+  "linkLabel": "Билеты",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "3+",
+  "duration": "1 час без антракта",
+  "description": "Режиссёр — Анна Зобачева. Фантазия по мотивам русской народной сказки\n«Приключение Колобка» - «без пяти минут мюзикл» для детей и взрослых, в котором Колобок вместе с Зайкой отправляются в свое первое настоящее путешествие - в лес! Если тебя совсем недавно испекли, так хочется увидеть мир своими глазами! Главное, не забывать об осторожности потому, что в чаще живут разные звери. Кто-то добрый, а кто-то.. хитрый и с рыжим хвостом!\nРежиссер спектакля Анна Зобачева создает свою современную, динамичную историю и при этом берет все лучшее от традиционной русской сказки, в которой заложено все то, ч"
+ },
+ {
+  "id": 68,
+  "title": "Ленинградочка",
+  "theatre": "Тверской театр кукол",
+  "address": "Проспект Победы, 9",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-16",
+  "time": "",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Уточняйте в театре",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://vk.com/club16278445",
+  "linkLabel": "Подробнее",
+  "professional": true,
+  "guestShow": false,
+  "ageLimit": "",
+  "duration": "",
+  "description": "Первый в России музыкальный фэшн-спектакль, за эффектной формой которого стоит не только красота эпохи. Это история о человеческой стойкости, женской силе, памяти и способности продолжать жить, когда привычный мир рушится."
+ },
+ {
+  "id": 69,
+  "title": "Салон красоты или О чём говорят женщины",
+  "theatre": "Театр Париж",
+  "address": "ДК «Химволокно», пл. Гагарина, 1",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-19",
+  "time": "19:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Уточняйте в театре",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://vk.com/wall-206028351_7454",
+  "linkLabel": "Подробнее",
+  "professional": false,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "",
+  "description": "В салоне красоты можно изменить всё: цвет волос, настроение и даже личную жизнь. По крайней мере, героини этого спектакля в этом абсолютно уверены.\n\nВас ждут смешные диалоги, неожиданные повороты, яркие персонажи и разговоры, которые обычно остаются «только между нами».\n\nНаши героини расскажут, как правильно варить борщ, вычислить изменщика и не сойти с ума в попытках устроить личное счастье.\n\nА после спектакля у вас точно появится несколько новых шуток, любимых фраз и желание срочно обсудить всё это по дороге домой."
+ },
+ {
+  "id": 70,
+  "title": "Мы-звук",
+  "theatre": "Ангар (танцевальный)",
+  "address": "Бульвар Радищева, фестиваль «Арт-бульвар»",
+  "genre": "Спектакль",
+  "eventType": "",
+  "date": "2026-06-19",
+  "time": "16:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Уточняйте в театре",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://vk.com/wall-149404494_723",
+  "linkLabel": "Подробнее",
+  "professional": false,
+  "guestShow": false,
+  "ageLimit": "",
+  "duration": "",
+  "description": "19 июня на фестивале «Арт-бульвар» (6+) под открытым небом на бульваре Радищева театр Ангар покажет отрывок спектакля «Мы-звук». В программе также пластический перфоманс."
+ },
+ {
+  "id": 71,
+  "title": "Салон красоты или О чём говорят женщины",
+  "theatre": "Театр Париж",
+  "address": "ДК «Химволокно», пл. Гагарина, 1",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-20",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Уточняйте в театре",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://vk.com/wall-206028351_7454",
+  "linkLabel": "Подробнее",
+  "professional": false,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "",
+  "description": "В салоне красоты можно изменить всё: цвет волос, настроение и даже личную жизнь. По крайней мере, героини этого спектакля в этом абсолютно уверены.\n\nВас ждут смешные диалоги, неожиданные повороты, яркие персонажи и разговоры, которые обычно остаются «только между нами».\n\nНаши героини расскажут, как правильно варить борщ, вычислить изменщика и не сойти с ума в попытках устроить личное счастье.\n\nА после спектакля у вас точно появится несколько новых шуток, любимых фраз и желание срочно обсудить всё это по дороге домой."
+ },
+ {
+  "id": 72,
+  "title": "Салон красоты или О чём говорят женщины",
+  "theatre": "Театр Париж",
+  "address": "ДК «Химволокно», пл. Гагарина, 1",
+  "genre": "Комедия",
+  "eventType": "",
+  "date": "2026-06-21",
+  "time": "17:00",
+  "price": 0,
+  "priceTo": 0,
+  "priceLabel": "Уточняйте в театре",
+  "ticketsAvailable": true,
+  "ticketsUrl": "https://vk.com/wall-206028351_7454",
+  "linkLabel": "Подробнее",
+  "professional": false,
+  "guestShow": false,
+  "ageLimit": "16+",
+  "duration": "",
+  "description": "В салоне красоты можно изменить всё: цвет волос, настроение и даже личную жизнь. По крайней мере, героини этого спектакля в этом абсолютно уверены.\n\nВас ждут смешные диалоги, неожиданные повороты, яркие персонажи и разговоры, которые обычно остаются «только между нами».\n\nНаши героини расскажут, как правильно варить борщ, вычислить изменщика и не сойти с ума в попытках устроить личное счастье.\n\nА после спектакля у вас точно появится несколько новых шуток, любимых фраз и желание срочно обсудить всё это по дороге домой."
+ }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentView = 'list';
+let currentDate = new Date();
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
+
+const WEEKDAYS = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const WEEKDAYS_FULL = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  populateFilters();
+  updateMonthTitle();
+  render();
+}
+
+function populateFilters() {
+  const theatres = [...new Set(SHOWS.map(s => s.theatre))].sort();
+  const genres = [...new Set(SHOWS.map(s => s.genre))].sort();
+  const tSel = document.getElementById('filterTheatre');
+  const gSel = document.getElementById('filterGenre');
+  theatres.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; tSel.appendChild(o); });
+  genres.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; gSel.appendChild(o); });
+}
+
+function getFilters() {
+  return {
+    theatre: document.getElementById('filterTheatre').value,
+    genre: document.getElementById('filterGenre').value,
+    day: document.getElementById('filterDay').value,
+    price: document.getElementById('filterPrice').value,
+    available: document.getElementById('filterAvailable').checked,
+    guest: document.getElementById('filterGuest').checked,
+    pro: document.getElementById('filterPro').checked
+  };
+}
+
+function getFilteredShows() {
+  const f = getFilters();
+  return SHOWS.filter(s => {
+    const d = new Date(s.date);
+    if (d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) return false;
+    if (f.theatre && s.theatre !== f.theatre) return false;
+    if (f.genre && s.genre !== f.genre) return false;
+    if (f.day !== '' && d.getDay() !== parseInt(f.day)) return false;
+    if (f.price && s.price > parseInt(f.price)) return false;
+    if (f.available && !s.ticketsAvailable) return false;
+    if (f.guest && !s.guestShow) return false;
+    if (f.pro && !s.professional) return false;
+    return true;
+  });
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  updateMonthTitle();
+  if (currentView === 'list') renderList();
+  else renderCalendar();
+}
+
+function updateMonthTitle() {
+  document.getElementById('monthTitle').textContent = MONTHS[currentMonth] + ' ' + currentYear;
+}
+
+function renderList() {
+  const shows = getFilteredShows().sort((a,b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+  const container = document.getElementById('listView');
+  if (!shows.length) {
+    container.innerHTML = '<div class="empty-state"><p>Спектаклей не найдено</p></div>';
+    return;
+  }
+  const byDate = {};
+  shows.forEach(s => { if (!byDate[s.date]) byDate[s.date] = []; byDate[s.date].push(s); });
+  container.innerHTML = Object.keys(byDate).sort().map(date => {
+    const d = new Date(date);
+    const dayNum = d.getDate();
+    const weekday = WEEKDAYS_FULL[d.getDay()];
+    const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+    return `<div class="day-section">
+      <div class="day-section-header">
+        <div class="day-date" style="${isWeekend ? 'color:var(--accent)' : ''}">${dayNum}</div>
+        <div class="day-weekday">${weekday}</div>
+      </div>
+      <div class="events-row">${byDate[date].map(s => renderCard(s)).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCard(s) {
+  const cls = [
+    !s.ticketsAvailable ? 'sold-out' : '',
+    s.guestShow ? 'guest-show' : '',
+    s.professional ? 'professional' : '',
+    s.priceLabel === 'Вход свободный' || s.price === 0 && s.priceTo === 0 && s.priceLabel.includes('взнос') ? '' : ''
+  ].filter(Boolean).join(' ');
+
+  const tags = [
+    s.genre ? `<span class="tag tag-genre">${s.genre}</span>` : '',
+    s.eventType ? `<span class="tag tag-guest">${s.eventType}</span>` : '',
+    s.guestShow ? `<span class="tag tag-guest">Гастроли</span>` : '',
+    s.ageLimit ? `<span class="tag tag-age">${s.ageLimit}</span>` : ''
+  ].filter(Boolean).join('');
+
+  return `<div class="card ${cls}" onclick="openModal(${s.id})">
+    <div class="card-time">${s.time}</div>
+    <div class="card-title">${s.title}</div>
+    <div class="card-theatre">${s.theatre}</div>
+    <div class="card-tags">${tags}</div>
+    <div class="card-footer">
+      <div class="card-price">${s.priceLabel}</div>
+      ${s.ticketsUrl ? `<a class="card-link" href="${s.ticketsUrl}" target="_blank" onclick="event.stopPropagation()">${s.linkLabel || 'Билеты'} →</a>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderCalendar() {
+  const shows = getFilteredShows();
+  const showsByDate = {};
+  shows.forEach(s => { if (!showsByDate[s.date]) showsByDate[s.date] = []; showsByDate[s.date].push(s); });
+
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+
+  // JS: 0=Вс, 1=Пн ... нам нужно начинать с Пн
+  // Сдвиг: Пн=0, Вт=1, ... Вс=6
+  const firstDow = (firstDay.getDay() + 6) % 7; // Пн=0, Вс=6
+
+  const cells = [];
+  // Пустые ячейки до начала месяца
+  for (let i = 0; i < firstDow; i++) {
+    const d = new Date(currentYear, currentMonth, 1 - (firstDow - i));
+    cells.push({ date: d, current: false });
+  }
+  // Дни месяца
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    cells.push({ date: new Date(currentYear, currentMonth, d), current: true });
+  }
+  // Заполняем до конца последней строки
+  while (cells.length % 7 !== 0) {
+    const last = cells[cells.length - 1].date;
+    cells.push({ date: new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1), current: false });
+  }
+
+  const dayCells = cells.map(({ date, current }) => {
+    const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    const isToday = dateStr === todayStr;
+    const dow = date.getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const dayShows = showsByDate[dateStr] || [];
+    const eventsHtml = dayShows.map(s => {
+      const cls = !s.ticketsAvailable ? 'sold-out' : s.guestShow ? 'guest-show' : s.professional ? 'professional' : '';
+      return `<div class="cal-event ${cls}" onclick="openModal(${s.id})" title="${s.title} — ${s.theatre}">
+        <div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.time} ${s.title}</div>
+        <div style="font-size:9px;opacity:0.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px">${s.theatre}</div>
+      </div>`;
+    }).join('');
+    return `<div class="cal-day ${!current ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isWeekend ? 'weekend' : ''}">
+      <div class="day-num">${date.getDate()}</div>
+      ${eventsHtml}
+    </div>`;
+  });
+
+  document.getElementById('calView').innerHTML = `
+    <div class="calendar-grid" style="margin-top:16px">
+      ${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => `<div class="cal-header">${d}</div>`).join('')}
+      ${dayCells.join('')}
+    </div>`;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(id) {
+  const s = SHOWS.find(x => x.id === id);
+  if (!s) return;
+  const d = new Date(s.date);
+  const dateStr = `${d.getDate()} ${['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'][d.getMonth()]}`;
+  const tags = [
+    s.genre ? `<span class="tag tag-genre">${s.genre}</span>` : '',
+    s.eventType ? `<span class="tag tag-guest">${s.eventType}</span>` : '',
+    s.guestShow ? `<span class="tag tag-guest">Гастроли</span>` : '',
+    s.ageLimit ? `<span class="tag tag-age">${s.ageLimit}</span>` : ''
+  ].filter(Boolean).join('');
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-time">${dateStr}, ${s.time}</div>
+    <div class="modal-title">${s.title}</div>
+    <div class="modal-theatre">${s.theatre}</div>
+    <div class="modal-address">${s.address}</div>
+    <div class="modal-tags">${tags}</div>
+    ${s.description ? `<div class="modal-desc">${s.description}</div>` : ''}
+    <div class="modal-meta">
+      ${s.duration ? `<div class="modal-meta-item"><div class="modal-meta-label">Продолжительность</div><div class="modal-meta-value">${s.duration}</div></div>` : ''}
+      <div class="modal-meta-item"><div class="modal-meta-label">Цена</div><div class="modal-meta-value">${s.priceLabel}</div></div>
+    </div>
+    ${s.ticketsUrl
+      ? `<a class="modal-btn" href="${s.ticketsUrl}" target="_blank">${s.linkLabel === 'Подробнее' ? 'Подробнее' : 'Купить билет'}</a>`
+      : ''}
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+// ============================================================
+// CONTROLS
+// ============================================================
+function switchView(v) {
+  currentView = v;
+  document.getElementById('listView').classList.toggle('active', v === 'list');
+  document.getElementById('calView').classList.toggle('active', v === 'calendar');
+  document.getElementById('btnList').classList.toggle('active', v === 'list');
+  document.getElementById('btnCal').classList.toggle('active', v === 'calendar');
+  render();
+}
+
+function changeMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  render();
+}
+
+document.querySelectorAll('select, input').forEach(el => el.addEventListener('change', render));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+init();
+</script>
+</body>
+</html>
