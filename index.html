@@ -190,8 +190,11 @@
     background: none;
     border: 1px solid var(--border);
     color: var(--ink);
-    width: 32px;
+    min-width: 32px;
     height: 32px;
+    padding: 0 10px;
+    gap: 6px;
+    white-space: nowrap;
     cursor: pointer;
     font-size: 14px;
     display: flex;
@@ -201,6 +204,14 @@
   }
 
   .nav-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* Подпись соседнего месяца со счётчиком: «Август (13)» */
+  .nav-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  .nav-btn.empty { opacity: 0.45; }
 
   /* MAIN */
   main { padding: 20px 40px 60px; }
@@ -481,7 +492,9 @@
     header { padding: 20px; }
     .filters-bar { padding: 12px 20px; }
     main { padding: 16px 20px 40px; }
-    .month-nav { padding: 16px 20px 0; }
+    .month-nav { padding: 16px 20px 0; gap: 10px; }
+    /* Узкий экран: в кнопках остаётся только счётчик — «(13)» */
+    .nav-month { display: none; }
     .events-row { grid-template-columns: 1fr; }
     .toggle-group { margin-left: 0; }
     .cal-event { font-size: 9px; padding: 2px 4px; }
@@ -564,9 +577,9 @@
 </div>
 
 <div class="month-nav">
-  <button class="nav-btn" onclick="changeMonth(-1)">&#8592;</button>
+  <button class="nav-btn" id="btnPrev" onclick="changeMonth(-1)">&#8592;<span class="nav-label"><span class="nav-month" id="prevMonth"></span> <span id="prevCount"></span></span></button>
   <div class="month-title" id="monthTitle"></div>
-  <button class="nav-btn" onclick="changeMonth(1)">&#8594;</button>
+  <button class="nav-btn" id="btnNext" onclick="changeMonth(1)"><span class="nav-label"><span class="nav-month" id="nextMonth"></span> <span id="nextCount"></span></span>&#8594;</button>
 </div>
 
 <main>
@@ -3026,19 +3039,34 @@ function getFilters() {
   };
 }
 
+function matchesFilters(s, f) {
+  const d = new Date(s.date);
+  if (f.theatre && s.theatre !== f.theatre) return false;
+  if (f.genre && s.genre !== f.genre) return false;
+  if (f.day !== '' && d.getDay() !== parseInt(f.day)) return false;
+  if (f.price && s.price > parseInt(f.price)) return false;
+  if (f.available && !s.ticketsAvailable) return false;
+  if (f.pro && !s.professional) return false;
+  return true;
+}
+
 function getFilteredShows() {
   const f = getFilters();
   return SHOWS.filter(s => {
     const d = new Date(s.date);
     if (d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) return false;
-    if (f.theatre && s.theatre !== f.theatre) return false;
-    if (f.genre && s.genre !== f.genre) return false;
-    if (f.day !== '' && d.getDay() !== parseInt(f.day)) return false;
-    if (f.price && s.price > parseInt(f.price)) return false;
-    if (f.available && !s.ticketsAvailable) return false;
-    if (f.pro && !s.professional) return false;
-    return true;
+    return matchesFilters(s, f);
   });
+}
+
+// Сколько спектаклей в указанном месяце — с учётом текущих фильтров,
+// чтобы счётчик на кнопке совпадал с тем, что реально увидишь после клика.
+function monthCount(year, month) {
+  const f = getFilters();
+  return SHOWS.filter(s => {
+    const d = new Date(s.date);
+    return d.getFullYear() === year && d.getMonth() === month && matchesFilters(s, f);
+  }).length;
 }
 
 // ============================================================
@@ -3052,6 +3080,17 @@ function render() {
 
 function updateMonthTitle() {
   document.getElementById('monthTitle').textContent = MONTHS[currentMonth] + ' ' + currentYear;
+  setNavLabel('prev', new Date(currentYear, currentMonth - 1, 1));
+  setNavLabel('next', new Date(currentYear, currentMonth + 1, 1));
+}
+
+// Подпись на кнопке соседнего месяца: «Август (13)». Пустой месяц — приглушаем.
+function setNavLabel(which, d) {
+  const n = monthCount(d.getFullYear(), d.getMonth());
+  document.getElementById(which + 'Month').textContent = MONTHS[d.getMonth()];
+  document.getElementById(which + 'Count').textContent = n ? '(' + n + ')' : '';
+  document.getElementById(which === 'prev' ? 'btnPrev' : 'btnNext')
+          .classList.toggle('empty', n === 0);
 }
 
 function renderList() {
